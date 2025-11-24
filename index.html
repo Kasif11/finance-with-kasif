@@ -3,30 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="assets/favicon.png" />
     
     <!-- Primary SEO Meta Tags -->
     <title>Finance with Kasif | Wealth Creation & Stock Market</title>
     <meta name="title" content="Finance with Kasif | Wealth Creation & Stock Market">
     <meta name="description" content="Finance with Kasif (FK) simplifies stock market investing, SIPs, and mutual funds. Get expert insights on wealth creation and personal finance for Indians.">
-    <meta name="keywords" content="Finance with Kasif, Kasif FK, Finance Kasif, Kasif Finance, FWK, FK, Stock Market, Investing, SIP, Mutual Funds, Personal Finance, IPO Watch, Wealth Creation, India">
+    <meta name="keywords" content="Finance with Kasif, FK, Stock Market, Investing, SIP, Mutual Funds, Personal Finance, IPO Watch, Wealth Creation, India">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
     <meta name="author" content="Kasif">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="https://api.iconify.design/heroicons:banknotes-solid.svg?color=%23059669" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://financewithkasif.in/">
     <meta property="og:title" content="Finance with Kasif | Wealth Creation & Stock Market">
     <meta property="og:description" content="Democratizing financial literacy. We bridge the gap between savings and wealth creation with data-driven insights.">
-    <meta property="og:image" content="https://picsum.photos/seed/fk/1200/630">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1200&auto=format&fit=crop">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://financewithkasif.in/">
     <meta property="twitter:title" content="Finance with Kasif | Wealth Creation & Stock Market">
     <meta property="twitter:description" content="Democratizing financial literacy. We bridge the gap between savings and wealth creation with data-driven insights.">
-    <meta property="twitter:image" content="https://picsum.photos/seed/fk/1200/630">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1200&auto=format&fit=crop">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -38,7 +40,7 @@
               secondary: '#022c22', // Emerald 950 (Deep Green)
               accent: '#d1fae5', // Emerald 100
               gold: '#d97706', // Amber 600 (Professional Accent)
-              surface: '#f8fafc', // Slate 50 (Better than stark white)
+              surface: '#f8fafc', // Slate 50
             },
             fontFamily: {
               sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -71,32 +73,26 @@
       body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
       .prose h1, .prose h2, .prose h3 { font-family: 'Merriweather', serif; color: #022c22; }
       .prose p { line-height: 1.8; color: #334155; }
-      /* Smooth scrolling for the whole page */
       html { scroll-behavior: smooth; }
-      
-      /* Custom Scrollbar */
       ::-webkit-scrollbar { width: 8px; }
       ::-webkit-scrollbar-track { background: #f1f1f1; }
       ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
       ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
-  
-<script type="importmap">
+  <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.3"
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@supabase/supabase-js": "https://aistudiocdn.com/@supabase/supabase-js@^2.84.0"
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
   <body class="bg-slate-50 text-slate-900 antialiased selection:bg-primary selection:text-white">
     <div id="root"></div>
-    <!-- Add this line so Vite knows where your React code starts -->
+    <!-- Pointing to index.tsx to match your existing file structure -->
     <script type="module" src="/src/index.tsx"></script>
-  <script type="module" src="/index.tsx"></script>
-</body>
+  </body>
 </html>

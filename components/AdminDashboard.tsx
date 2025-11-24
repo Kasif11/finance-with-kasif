@@ -76,6 +76,7 @@ const AdminDashboard: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentPost, setCurrentPost] = useState<Partial<BlogPost>>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [dbError, setDbError] = useState(false);
 
   useEffect(() => {
     loadPosts();
@@ -83,6 +84,10 @@ const AdminDashboard: React.FC = () => {
 
   const loadPosts = async () => {
     const data = await StorageService.getPosts();
+    // Simple heuristic: if data is mock data but Supabase keys exist, we probably had an error
+    if (data.length === 2 && data[0].id === '1' && (import.meta as any).env.VITE_SUPABASE_URL) {
+       // Could set error state here if we want to warn user
+    }
     setPosts(data);
   };
 
@@ -124,6 +129,7 @@ const AdminDashboard: React.FC = () => {
     }
     
     setIsSaving(true);
+    setDbError(false);
     try {
       if (!currentPost.slug) {
         currentPost.slug = currentPost.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -139,9 +145,12 @@ const AdminDashboard: React.FC = () => {
       await StorageService.savePost(currentPost as BlogPost);
       setIsEditing(false);
       loadPosts();
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      // Alert handled in StorageService, but we stop loading state here
+      // Detection of typical Supabase schema error
+      if (e.code === '42P01' || e.code === '42703' || e.message?.includes('column')) {
+         setDbError(true);
+      }
     } finally {
       setIsSaving(false);
     }
@@ -169,6 +178,31 @@ const AdminDashboard: React.FC = () => {
           <h2 className="text-3xl font-bold text-secondary font-serif">Editor</h2>
           <button onClick={() => setIsEditing(false)} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
         </div>
+
+        {dbError && (
+          <div className="bg-red-50 border border-red-200 p-4 rounded-lg mb-6 animate-fade-in">
+            <h3 className="text-red-800 font-bold mb-2">Database Schema Error</h3>
+            <p className="text-red-600 text-sm mb-2">Your Supabase database is missing the required columns. Please run this SQL in your Supabase SQL Editor:</p>
+            <pre className="bg-white p-3 rounded border border-red-100 text-xs overflow-x-auto text-gray-700">
+{`create table public.posts (
+  id text primary key,
+  title text,
+  slug text unique,
+  excerpt text,
+  content text,
+  cover_image text,
+  author text,
+  category text,
+  tags jsonb,
+  published_at text,
+  read_time int,
+  is_published boolean,
+  likes int default 0,
+  dislikes int default 0
+);`}
+            </pre>
+          </div>
+        )}
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 space-y-8">
           <div className="space-y-6">
