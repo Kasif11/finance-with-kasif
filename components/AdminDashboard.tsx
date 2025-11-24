@@ -619,6 +619,20 @@ const AdminDashboard: React.FC = () => {
               />
             </div>
 
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">URL Slug (Auto-generated if empty)</label>
+              <div className="flex items-center">
+                 <span className="bg-gray-100 border border-r-0 border-gray-200 p-3 rounded-l-lg text-gray-500 text-sm">financewithkasif.in/blog/</span>
+                 <input 
+                   type="text" 
+                   className="flex-1 p-3 bg-gray-50 border border-gray-200 rounded-r-lg text-sm font-mono text-gray-900 focus:bg-white focus:ring-2 focus:ring-primary outline-none"
+                   value={currentPost.slug || ''}
+                   onChange={e => setCurrentPost({...currentPost, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-')})}
+                   placeholder="custom-url-slug"
+                 />
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Category</label>

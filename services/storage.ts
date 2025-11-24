@@ -394,11 +394,17 @@ export const StorageService = {
 
         const { error } = await supabase.from('posts').upsert(payload);
         
-        if (error) {
-            console.error("Supabase Save Details:", error.message, error.details);
-            throw error;
-        }
+        if (error) throw error;
+        
       } catch (err: any) {
+        // Handle Duplicate Slug Error (Postgres code 23505)
+        if (err.code === '23505' && (err.message?.includes('slug') || err.message?.includes('posts_slug_key'))) {
+           const newSlug = `${post.slug}-${Math.floor(Math.random() * 10000)}`;
+           console.warn(`Duplicate slug detected. Auto-resolving to: ${newSlug}`);
+           post.slug = newSlug;
+           return StorageService.savePost(post); // Recursive retry with new slug
+        }
+
         console.error("Supabase Save Error:", err);
         alert(`Error saving to database: ${err.message || 'Unknown Error'}`);
         return; // Stop execution if DB save fails
