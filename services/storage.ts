@@ -395,10 +395,14 @@ export const StorageService = {
         const { error } = await supabase.from('posts').upsert(payload);
         
         if (error) throw error;
+
+        // SUCCESS: If cloud save works, we STOP here.
+        // We do NOT write to localStorage to prevent "QuotaExceededError".
+        return; 
         
       } catch (err: any) {
-        // Handle Duplicate Slug Error (Postgres code 23505)
-        if (err.code === '23505' && (err.message?.includes('slug') || err.message?.includes('posts_slug_key'))) {
+        // Handle Duplicate Slug Error (Postgres code 23505 OR HTTP 409)
+        if (err.code === '23505' || err.status === 409 || err.message?.includes('duplicate key') || err.message?.includes('slug')) {
            const newSlug = `${post.slug}-${Math.floor(Math.random() * 10000)}`;
            console.warn(`Duplicate slug detected. Auto-resolving to: ${newSlug}`);
            post.slug = newSlug;
@@ -411,17 +415,22 @@ export const StorageService = {
       }
     }
 
-    // Always update local storage for immediate UI feel or offline backup
-    const rawLocal = localStorage.getItem(STORAGE_KEY_POSTS);
-    const localPosts: BlogPost[] = rawLocal ? JSON.parse(rawLocal) : INITIAL_POSTS;
-    
-    const index = localPosts.findIndex(p => p.id === post.id);
-    if (index >= 0) {
-      localPosts[index] = post;
-    } else {
-      localPosts.unshift(post);
+    // --- LOCAL STORAGE LOGIC (Only runs if Supabase is NOT connected) ---
+    try {
+      const rawLocal = localStorage.getItem(STORAGE_KEY_POSTS);
+      const localPosts: BlogPost[] = rawLocal ? JSON.parse(rawLocal) : INITIAL_POSTS;
+      
+      const index = localPosts.findIndex(p => p.id === post.id);
+      if (index >= 0) {
+        localPosts[index] = post;
+      } else {
+        localPosts.unshift(post);
+      }
+      localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(localPosts));
+    } catch (e) {
+      console.error("LocalStorage Save Error (Quota Exceeded?):", e);
+      alert("Local storage is full. Please use the Cloud Database (Supabase) to save more posts.");
     }
-    localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(localPosts));
   },
 
   // ASYNC: Delete
@@ -429,6 +438,7 @@ export const StorageService = {
     if (isCloudEnabled && supabase) {
       await supabase.from('posts').delete().eq('id', id);
     }
+    // Try to cleanup local storage too if it exists
     const rawLocal = localStorage.getItem(STORAGE_KEY_POSTS);
     if (rawLocal) {
         const posts: BlogPost[] = JSON.parse(rawLocal);
