@@ -286,7 +286,7 @@ const HomePage = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
     "@type": "FinancialService",
     "name": "Finance with Kasif",
     "alternateName": "FK",
-    "url": "https://financewithkasif.in",
+    "url": "https://financekasif.vercel.app/",
     "logo": "https://api.iconify.design/heroicons:banknotes-solid.svg?color=%23059669",
     "description": "Unbiased financial insights for Indian investors covering SIP, Mutual Funds, and Stock Market analysis.",
     "founder": {

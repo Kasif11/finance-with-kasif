@@ -470,10 +470,10 @@ const BlogDetailPage = ({ slug, onNavigate }: { slug: string, onNavigate: (path:
                 <div className="text-center md:text-left">
                    <h3 className="text-lg font-bold text-secondary mb-2">Written by {post.author}</h3>
                    <p className="text-gray-500 text-sm mb-4 leading-relaxed">Financial Analyst and Content Creator. Dedicated to simplifying complex market concepts for the everyday Indian investor. Passionate about wealth creation through SIPs and long-term equity.</p>
-                   <div className="flex justify-center md:justify-start gap-4">
+                   {/* <div className="flex justify-center md:justify-start gap-4">
                       <button className="text-gray-400 hover:text-blue-500 transition-colors"><TwitterIcon /></button>
                       <button className="text-gray-400 hover:text-blue-700 transition-colors"><LinkedInIcon /></button>
-                   </div>
+                   </div> */}
                 </div>
             </div>
 
